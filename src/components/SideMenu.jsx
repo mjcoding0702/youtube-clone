@@ -12,12 +12,12 @@ function SideElement({icon, text}) {
     )
 }
 
-export default function Sidebar() {
+export default function SideMenu() {
   return (
     <>
         <div className="sidebar bg-white overflow-auto pb-5 d-none d-sm-block" style={{ position: 'fixed', height:"100vh", width:"250px"}}>
             <ul className="nav nav-pills flex-column mb-auto ps-3 px-2">
-                <SideElement icon='bi-house-door-fill' text="Home"/>
+                <SideElement icon='bi-house-door-fill' text='Home'/>
                 <SideElement icon='bi-film' text="Shorts"/>
                 <SideElement icon='bi-collection-play' text="Subscription"/>
                 <SideElement icon='bi-play-circle' text="Youtube Music"/>
