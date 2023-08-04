@@ -53,7 +53,7 @@ export const fetchVideoById = createAsyncThunk(
 // Async thunk for liking/disliking a video
 export const likeVideo = createAsyncThunk(
     'video/likeVideo',
-    async ({videoId, userId, likeType}, { rejectWithValue, dispatch }) => {
+    async ({videoId, userId, likeType}, { rejectWithValue }) => {
       try {
         const response = await axios.post('https://youtube-clone-api.chungmangjie200.repl.co/likevideo', {
           videoId, userId, likeType
@@ -97,12 +97,29 @@ export const fetchLikeType = createAsyncThunk (
 //Async thunk for adding comment to a video
 export const addComment = createAsyncThunk(
   'video/addComment',
-  async ({ userId, videoId, comment }) => {
-    const response = await axios.post('https://youtube-clone-api.chungmangjie200.repl.co/addcomment', { userId, videoId, comment });
-    return response.data;
+  async ({ userId, videoId, comment }, {rejectWithValue}) => {
+    try {
+      const response = await axios.post('https://youtube-clone-api.chungmangjie200.repl.co/addcomment', { userId, videoId, comment });
+      return response.data;
+    } catch(error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
   
+
+//Async thunk for fetching comment from a video
+export const fetchComments = createAsyncThunk(
+  'video/fetchComments',
+  async(videoId, {rejectWithValue}) => {
+    try {
+      const response = await axios.get(`https://youtube-clone-api.chungmangjie200.repl.co/fetchcomment/${videoId}`)
+      return response.data
+    } catch(error) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
 
 // Video slice
 export const videoSlice = createSlice({
@@ -113,6 +130,7 @@ export const videoSlice = createSlice({
       error: null,
       userLikeStatus: null,
       likesDislikes: { likes: 0, dislikes: 0 },
+      comments: []
     },
     reducers: {
         updateLikesDislikes: (state, action) => {
@@ -164,7 +182,11 @@ export const videoSlice = createSlice({
         .addCase(addComment.fulfilled, (state,action) => {
           state.status = 'succeeded';
         })
-        
+        .addCase(fetchComments.fulfilled, (state, action) => {
+          state.status = 'succeeded';
+          // Add any fetched comments to the array
+          state.comments = action.payload;
+        })
     },
   });
 

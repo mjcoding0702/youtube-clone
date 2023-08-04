@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import VideoComments from './VideoComments';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, fetchLikeType, fetchLikesDislikes, likeVideo, updateLikeStatus, updateLikesDislikes } from '../features/videoSlice';
+import { addComment, fetchComments, fetchLikeType, fetchLikesDislikes, likeVideo, updateLikeStatus, updateLikesDislikes } from '../features/videoSlice';
 
 export default function VideoDetails({video}) {
     const dispatch = useDispatch();
@@ -14,12 +14,16 @@ export default function VideoDetails({video}) {
     //User Data
     const user = useSelector((state) => state.user.user)
     const userProfile = user.profileurl || 'src\\assets\\profile-backup.png';  //incase if google return 403 code
+    
+    //Comments Data
+    const comments = useSelector((state) => state.video.comments)
+
 
     //Handle like
     const videoId = video.id;
     const userLikeStatus = useSelector((state) => state.video.userLikeStatus)
     const likesDislikes = useSelector((state) => state.video.likesDislikes);
-    
+   
     const handleLike = async (likeType) => {
         // Check if the user has already liked/disliked the video
         if (userLikeStatus.likeType !== likeType) {
@@ -52,14 +56,18 @@ export default function VideoDetails({video}) {
 
     //Handle comment
     const [commentText, setCommentText] = useState('');
+    const [isCommenting, setIsCommenting] = useState(false);
 
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
         if (commentText) {
-          await dispatch(addComment({ userId: user.id, videoId: video.id, comment: commentText }));
-          setCommentText('');  // Clear the input field
+            setIsCommenting(true); 
+            await dispatch(addComment({ userId: user.id, videoId: video.id, comment: commentText }));
+            setCommentText('');  
+            setIsCommenting(false); 
+            dispatch(fetchComments(videoId));  //Refresh the comments
         }
-      };
+    };
 
     //Fetch likes and dislikes for video when component mount
     useEffect(() => {
@@ -67,6 +75,7 @@ export default function VideoDetails({video}) {
             console.log("Ran")
             dispatch(fetchLikesDislikes(videoId));
             dispatch(fetchLikeType({videoId, userId: user.id}))
+            dispatch(fetchComments(videoId));
         }
     },[videoId])
 
@@ -128,21 +137,28 @@ export default function VideoDetails({video}) {
                 <p style={{fontSize: '18px'}}>15 Comments</p>
                 <div className="d-flex align-items-center mb-4">
                     <img src={userProfile} width="40" alt='test' className='rounded-circle' />
-                    <form onSubmit={handleCommentSubmit} className="w-100 d-flex">
+                    <form onSubmit={handleCommentSubmit} className="d-flex" style={{width: '90%'}}>
                         <input 
                             type="text" 
                             className="form-control ms-2" 
                             placeholder="Add a comment..." 
                             value={commentText} 
                             onChange={(e) => setCommentText(e.target.value)} 
+                            maxLength="400"
                             autoFocus 
+                            required
+                            disabled={isCommenting}
                         />
-                        <button type="submit" className="btn btn-link text-primary text-decoration-none border border-secondary bg-dark text-white ms-3 fw-medium" style={{fontSize: '14px'}}>Comment</button>
+                        <button type="submit" className="btn btn-link text-primary text-decoration-none border border-secondary bg-dark text-white ms-4 fw-medium" style={{fontSize: '14px'}} disabled={isCommenting}>
+                            {isCommenting ? 'Commenting...' : 'Comment'}
+                        </button>
                     </form>
                 </div>
-                <VideoComments/>
-                <VideoComments/>
-
+                {comments && (
+                    comments.map((comment) => (
+                        <VideoComments key={comment.id} comment={comment.comment} userId={comment.user_id} />
+                    ))
+                )}
             </div>
         </>
   )
