@@ -1,9 +1,42 @@
 import './App.css'
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './pages/Home'
 import VideoPage from './pages/VideoPage'
+import AuthPage from './pages/AuthPage'
+import { AuthContext, AuthProvider } from './components/AuthProvider'
+import { useContext } from 'react'
+import { auth } from './firebase'
+import { Dropdown } from 'react-bootstrap';
+import { useEffect } from 'react'
+import { persistor, store } from './store'
+import { Provider, useSelector } from 'react-redux';
+import { PersistGate } from 'redux-persist/lib/integration/react'
 
 function Navbar() {
+  const {currentUser} = useContext(AuthContext);
+  const navigate = useNavigate();
+  
+  const user = useSelector((state) => state.user.user);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
+  //Handle user logout
+  const handleLogout = () => {
+    persistor.purge().then(() => {
+      // Perform some action after the state has been purged
+      auth.signOut();
+    });
+  }
+
+  //Navigate user after logging out
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login')
+    }
+  },[currentUser])
+
   return (
     <>
       <div className="nav-container bg-white" style={{position: 'sticky', top:0, zIndex: 1000}}>
@@ -16,7 +49,7 @@ function Navbar() {
 
           {/* Second column */}
           <div className="col col-sm-4 col-md-6 col-lg-5 d-none d-sm-flex align-items-center justify-content-center">
-            <div className="input-group flex-nowrap col-10" style={{width: "90%"}}>
+            <div className="input-group flex-nowrap col-10 disabled" style={{width: "90%"}}>
               <input type="text" className="form-control rounded-start-pill" placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2"></input>
               <button className="input-group-text rounded-end-circle" id="basic-addon2">
                 <i className="bi bi-search" style={{fontSize: "20px"}}></i>
@@ -43,9 +76,15 @@ function Navbar() {
             </li>
 
             <li>
-              <a href="#" className="nav-link px-2">
-                <img src="src\assets\Rex Logo (3).PNG" width={35}></img>
-              </a>
+              <Dropdown>
+                  <Dropdown.Toggle as="a" className="nav-link px-2 pointer-cursor" style={{color: 'black', cursor: 'pointer'}}>
+                      <img src={user.profileurl || "src/assets/profile-backup.png"} width={35} className='rounded-circle' alt='profilePicture' />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                      <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+              </Dropdown>
             </li>
           </ul>
         </div>
@@ -59,15 +98,22 @@ function Navbar() {
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navbar/>}>
-            <Route index element={<Home/>} />
-            <Route path='/home' element={<Home/>} />
-            <Route path='/video' element={<VideoPage/>} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <AuthProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navbar/>}>
+                <Route index element={<AuthPage/>} />
+                <Route path='/home' element={<Home/>} />
+                <Route path='/video' element={<VideoPage/>} />
+              </Route>
+              <Route path='/login' element={<AuthPage/>} />
+            </Routes>
+          </BrowserRouter>
+        </PersistGate>
+      </Provider>
+    </AuthProvider>
     </>
   )
 }
