@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import VideoComments from './VideoComments';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLikeType, fetchLikesDislikes, likeVideo, updateLikesDislikes } from '../features/videoSlice';
+import { fetchLikeType, fetchLikesDislikes, likeVideo, updateLikeStatus, updateLikesDislikes } from '../features/videoSlice';
 
 export default function VideoDetails({video}) {
     const [isCommenting, setIsCommenting] = useState(false);
@@ -20,18 +20,36 @@ export default function VideoDetails({video}) {
     const videoId = video.id;
     const userLikeStatus = useSelector((state) => state.video.userLikeStatus)
     const likesDislikes = useSelector((state) => state.video.likesDislikes);
-    console.log(userLikeStatus)
-    const handleLike = async (likeType) => {
-        // Optimistic update
-        if (likeType === 'like') {
-            dispatch(updateLikesDislikes({ likes: Number(likesDislikes.likes) + 1, dislikes: Number(likesDislikes.dislikes) }));
-        } else {
-            dispatch(updateLikesDislikes({ likes: Number(likesDislikes.likes), dislikes: Number(likesDislikes.dislikes) + 1 }));
-        }
     
-        await dispatch(likeVideo({ userId: user.id, videoId: video.id, likeType }));
-        dispatch(fetchLikesDislikes(video.id));
+    const handleLike = async (likeType) => {
+        // Check if the user has already liked/disliked the video
+        if (userLikeStatus.likeType !== likeType) {
+            // Optimistic update
+            if (likeType === 'like') {
+                // Increase likes count and decrease dislikes count (if it's not already 0)
+                dispatch(updateLikesDislikes({ 
+                    likes: Number(likesDislikes.likes) + 1, 
+                    dislikes: Number(likesDislikes.dislikes) > 0 ? Number(likesDislikes.dislikes) - 1 : 0 
+                }));
+                // Update userLikeStatus to 'like'
+                dispatch(updateLikeStatus({likeType: 'like'}));
+            } else {
+                // Increase dislikes count and decrease likes count (if it's not already 0)
+                dispatch(updateLikesDislikes({ 
+                    likes: Number(likesDislikes.likes) > 0 ? Number(likesDislikes.likes) - 1 : 0, 
+                    dislikes: Number(likesDislikes.dislikes) + 1 
+                }));
+                // Update userLikeStatus to 'dislike'
+                dispatch(updateLikeStatus({likeType: 'dislike'}));
+            }
+    
+            // Update the like/dislike status in the backend
+            await dispatch(likeVideo({ userId: user.id, videoId: video.id, likeType }));
+            // Fetch the updated likes and dislikes
+            dispatch(fetchLikesDislikes(video.id));
+        }
     };
+    
     
     //Display comment input to let user enter comments
     const handleClick = () => {
@@ -51,16 +69,16 @@ export default function VideoDetails({video}) {
         <>
             <div className="col-12 col-lg-8 col-xxl-9 px-0">
                 {videoURL ? (
-                    <div key={videoURL} className="embed-responsive embed-responsive-16by9">
-                        <video className="embed-responsive-item" controls style={{width: '100%'}}>
+                    <div key={videoURL} style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden'}}>
+                        <video controls style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'contain'}}>
                             <source src={videoURL} type="video/mp4"/>
                             {/* Fallback for browsers that don't support the <video> element */}
                             Your browser does not support the video tag.
                         </video>
                     </div>
                 ) : (
-                    <div className="embed-responsive embed-responsive-16by9">
-                        <video className="embed-responsive-item" controls style={{width: '100%'}}>
+                    <div style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden'}}>
+                        <video controls style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'contain'}}>
                             <source type="video/mp4"/>
                             {/* Fallback for browsers that don't support the <video> element */}
                             Your browser does not support the video tag.

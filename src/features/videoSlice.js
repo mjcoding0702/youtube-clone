@@ -109,6 +109,9 @@ export const videoSlice = createSlice({
         updateLikesDislikes: (state, action) => {
             state.likesDislikes = action.payload;
         },
+        updateLikeStatus: (state, action) => {
+          state.userLikeStatus = action.payload;
+        }
     },
     extraReducers: (builder) => {
       builder
@@ -153,6 +156,6 @@ export const videoSlice = createSlice({
     },
   });
 
-  export const { updateLikesDislikes } = videoSlice.actions;
+  export const { updateLikesDislikes, updateLikeStatus} = videoSlice.actions;
   export default videoSlice.reducer;
   
