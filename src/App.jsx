@@ -11,6 +11,7 @@ import { useEffect } from 'react'
 import { persistor, store } from './store'
 import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react'
+import VideoForm from './pages/VideoForm'
 
 function Navbar() {
   const {currentUser} = useContext(AuthContext);
@@ -19,7 +20,6 @@ function Navbar() {
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    console.log(user);
   }, [user]);
 
   //Handle user logout
@@ -44,7 +44,7 @@ function Navbar() {
           {/* First column */}
           <div className="col-md-auto d-flex align-items-center">
             <i className="bi bi-list" style={{fontSize: "24px"}}></i>
-            <img src="src\assets\yt-logo.png" width="120" alt="YouTube logo" className="ms-2"></img>
+            <a href="/home"><img src="https://firebasestorage.googleapis.com/v0/b/clone-4b31b.appspot.com/o/yt-logo.png?alt=media&token=73306d8f-127f-46b2-bca0-f234f2049ea0" width="120" alt="YouTube logo" className="ms-2"></img></a>
           </div>
 
           {/* Second column */}
@@ -106,7 +106,8 @@ function App() {
               <Route path="/" element={<Navbar/>}>
                 <Route index element={<AuthPage/>} />
                 <Route path='/home' element={<Home/>} />
-                <Route path='/video' element={<VideoPage/>} />
+                <Route path='/video/:videoId' element={<VideoPage/>} />
+                <Route path='/videoform' element={<VideoForm/>} />
               </Route>
               <Route path='/login' element={<AuthPage/>} />
             </Routes>

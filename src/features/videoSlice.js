@@ -40,7 +40,7 @@ export const fetchVideoById = createAsyncThunk(
     'video/fetchVideoById',
     async (videoId, {rejectWithValue}) => {
         try {
-            const response = await axios.get(`https://youtube-clone-api.chungmangjie200.repl.co/video/${videoId}`);
+            const response = await axios.get(`https://youtube-clone-api.chungmangjie200.repl.co/fetchvideo/${videoId}`);
             return response.data; //Video data
         } catch (error){
             return rejectWithValue(error.message)
