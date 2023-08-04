@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import VideoComments from './VideoComments';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLikeType, fetchLikesDislikes, likeVideo, updateLikeStatus, updateLikesDislikes } from '../features/videoSlice';
+import { addComment, fetchLikeType, fetchLikesDislikes, likeVideo, updateLikeStatus, updateLikesDislikes } from '../features/videoSlice';
 
 export default function VideoDetails({video}) {
-    const [isCommenting, setIsCommenting] = useState(false);
     const dispatch = useDispatch();
 
     //Video Data
@@ -50,11 +49,17 @@ export default function VideoDetails({video}) {
         }
     };
     
-    
-    //Display comment input to let user enter comments
-    const handleClick = () => {
-        setIsCommenting(!isCommenting);
-    };
+
+    //Handle comment
+    const [commentText, setCommentText] = useState('');
+
+    const handleCommentSubmit = async (event) => {
+        event.preventDefault();
+        if (commentText) {
+          await dispatch(addComment({ userId: user.id, videoId: video.id, comment: commentText }));
+          setCommentText('');  // Clear the input field
+        }
+      };
 
     //Fetch likes and dislikes for video when component mount
     useEffect(() => {
@@ -121,13 +126,19 @@ export default function VideoDetails({video}) {
                     <p style={{fontSize: '14px'}}>{video.description}</p>
                 </div>
                 <p style={{fontSize: '18px'}}>15 Comments</p>
-                <div onClick={handleClick} className="d-flex align-items-center mb-4">
+                <div className="d-flex align-items-center mb-4">
                     <img src={userProfile} width="40" alt='test' className='rounded-circle' />
-                    {!isCommenting ? (
-                        <span className="ms-3">Add a comment...</span>
-                    ) : (
-                        <input type="text" className="form-control ms-2" placeholder="Add a comment..." autoFocus />
-                    )}
+                    <form onSubmit={handleCommentSubmit} className="w-100 d-flex">
+                        <input 
+                            type="text" 
+                            className="form-control ms-2" 
+                            placeholder="Add a comment..." 
+                            value={commentText} 
+                            onChange={(e) => setCommentText(e.target.value)} 
+                            autoFocus 
+                        />
+                        <button type="submit" className="btn btn-link text-primary text-decoration-none border border-secondary bg-dark text-white ms-3 fw-medium" style={{fontSize: '14px'}}>Comment</button>
+                    </form>
                 </div>
                 <VideoComments/>
                 <VideoComments/>

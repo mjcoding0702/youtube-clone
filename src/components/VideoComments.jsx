@@ -7,16 +7,6 @@ export default function VideoComments() {
             <div>
                 <p className="m-0 ps-3 fw-medium" style={{fontSize: '12px'}}>@cmj_0702</p>
                 <p className="m-0 ps-3">This is a commentt</p>
-                <div className="d-flex">
-                    <div className="ms-3">
-                        <i className='bi bi-hand-thumbs-up me-2' style={{fontSize: "18px"}}></i>
-                        <span className="text-muted">5</span>
-                    </div>
-                    <div className="ms-3">
-                        <i className='bi bi-hand-thumbs-down me-2' style={{fontSize: "18px"}}></i>
-                        <span className="text-muted">5</span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

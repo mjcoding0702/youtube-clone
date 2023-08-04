@@ -93,6 +93,15 @@ export const fetchLikeType = createAsyncThunk (
         }
     }
 ) 
+
+//Async thunk for adding comment to a video
+export const addComment = createAsyncThunk(
+  'video/addComment',
+  async ({ userId, videoId, comment }) => {
+    const response = await axios.post('https://youtube-clone-api.chungmangjie200.repl.co/addcomment', { userId, videoId, comment });
+    return response.data;
+  }
+);
   
 
 // Video slice
@@ -151,6 +160,9 @@ export const videoSlice = createSlice({
         })
         .addCase(fetchLikeType.fulfilled, (state, action) => {
             state.userLikeStatus = action.payload;
+        })
+        .addCase(addComment.fulfilled, (state,action) => {
+          state.status = 'succeeded';
         })
         
     },
