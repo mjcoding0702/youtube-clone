@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import VideoComments from './VideoComments';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLikeType, fetchLikesDislikes, likeVideo, updateLikesDislikes } from '../features/videoSlice';
 
 export default function VideoDetails({video}) {
     const [isCommenting, setIsCommenting] = useState(false);
+    const dispatch = useDispatch();
 
     //Video Data
     const uploadedDate = new Date(video.uploaded_at);
@@ -13,11 +15,37 @@ export default function VideoDetails({video}) {
     //User Data
     const user = useSelector((state) => state.user.user)
     const userProfile = user.profileurl || 'src\\assets\\profile-backup.png';  //incase if google return 403 code
-    console.log(user)
 
+    //Handle like
+    const videoId = video.id;
+    const userLikeStatus = useSelector((state) => state.video.userLikeStatus)
+    const likesDislikes = useSelector((state) => state.video.likesDislikes);
+    console.log(userLikeStatus)
+    const handleLike = async (likeType) => {
+        // Optimistic update
+        if (likeType === 'like') {
+            dispatch(updateLikesDislikes({ likes: Number(likesDislikes.likes) + 1, dislikes: Number(likesDislikes.dislikes) }));
+        } else {
+            dispatch(updateLikesDislikes({ likes: Number(likesDislikes.likes), dislikes: Number(likesDislikes.dislikes) + 1 }));
+        }
+    
+        await dispatch(likeVideo({ userId: user.id, videoId: video.id, likeType }));
+        dispatch(fetchLikesDislikes(video.id));
+    };
+    
+    //Display comment input to let user enter comments
     const handleClick = () => {
         setIsCommenting(!isCommenting);
     };
+
+    //Fetch likes and dislikes for video when component mount
+    useEffect(() => {
+        if (videoId){
+            console.log("Ran")
+            dispatch(fetchLikesDislikes(videoId));
+            dispatch(fetchLikeType({videoId, userId: user.id}))
+        }
+    },[videoId])
 
     return (
         <>
@@ -53,12 +81,12 @@ export default function VideoDetails({video}) {
                     </div>
                     <div className="d-flex align-items-center">
                         <div className="me-3">
-                            <i className='bi bi-hand-thumbs-up-fill me-2' style={{fontSize: "20px"}}></i>
-                            <span className="fw-medium fs-6">5</span>
+                            <i className={`bi ${userLikeStatus && userLikeStatus.likeType === 'like' ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'} me-2`} style={{fontSize: "20px"}} onClick={() => handleLike('like')}></i>
+                            <span className="fw-medium fs-6">{likesDislikes.likes || 0}</span>
                         </div>
                         <div className="me-3">
-                            <i className='bi bi-hand-thumbs-down-fill me-2' style={{fontSize: "20px"}}></i>
-                            <span className="fw-medium fs-6">5</span>
+                            <i className={`bi ${userLikeStatus && userLikeStatus.likeType === 'dislike' ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down'} me-2`} style={{fontSize: "20px"}} onClick={() => handleLike('dislike')}></i>
+                            <span className="fw-medium fs-6">{likesDislikes.dislikes || 0}</span>
                         </div>
                         
                         <div className="me-3 d-flex align-items-center">
