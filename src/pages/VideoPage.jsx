@@ -16,7 +16,6 @@ export default function VideoPage() {
     useEffect(() => {
         dispatch(fetchVideoById(videoId));
         dispatch(fetchAllVideos());
-
     }, [dispatch, videoId])
 
     return (

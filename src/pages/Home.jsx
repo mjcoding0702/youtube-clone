@@ -59,7 +59,7 @@ export default function Home() {
               allVideos.map((video) => (
                 <>
                   <div className="col-sm-12 col-md-6 col-lg-4 col-xxl-3 d-flex" key={video.id}>
-                    <VideoCard imageURL={video.thumbnailurl} logoURL={video.profileurl} videoId={video.id} title={video.title} user={video.name} views={video.views} uploaded_at={video.uploaded_at} duration={video.duration}/>
+                    <VideoCard thumbnailURL={video.thumbnailurl} logoURL={video.profileurl} videoId={video.id} title={video.title} user={video.name} views={video.views} uploaded_at={video.uploaded_at} duration={video.duration}/>
                   </div>
                 </>
               ))

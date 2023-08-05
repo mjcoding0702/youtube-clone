@@ -164,7 +164,6 @@ export const fetchAllVideos = createAsyncThunk(
   'video/fetchAllVideos',
   async (_, {rejectWithValue}) => {
     try {
-      console.log("ran")
       const response = await axios.get(`https://youtube-clone-api.chungmangjie200.repl.co/fetchallvideos`)
       return response.data
     } catch (err) {
@@ -178,7 +177,6 @@ export const fetchUserVideos = createAsyncThunk(
   'video/fetchUserVideos',
   async (userId, {rejectWithValue}) => {
     try {
-      console.log("ran")
       const response = await axios.get(`https://youtube-clone-api.chungmangjie200.repl.co/fetchuservideos/${userId}`)
       return response.data
     } catch (err) {
@@ -186,6 +184,51 @@ export const fetchUserVideos = createAsyncThunk(
     }
   }
 )
+
+//Async thunk to a specific video
+export const editVideo = createAsyncThunk(
+  'video/editVideo',
+  async ({videoId, newTitle, newDescription, newDuration, newThumbnailURL}, {rejectWithValue}) => {
+    try {
+      let thumbnailURL = "";
+
+      // Check if newThumbnailURL is a File object
+      if (newThumbnailURL instanceof File) {
+        const thumbnailRef = ref(storage, `thumbnails/${newThumbnailURL.name}`);
+        const thumbnailResponse = await uploadBytes(thumbnailRef, newThumbnailURL);
+        thumbnailURL = await getDownloadURL(thumbnailResponse.ref);
+      } else {
+        // If newThumbnailURL is not a File object, it's a URL
+        thumbnailURL = newThumbnailURL;
+      }
+
+      const response = await axios.put(`https://youtube-clone-api.chungmangjie200.repl.co/editVideo`, {
+        videoId,
+        newTitle,
+        newDescription,
+        newDuration,
+        newThumbnailURL: thumbnailURL,
+      });
+
+      return response.data;  // The updated video
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+)
+
+//Async thunk to delete a video
+export const deleteVideo = createAsyncThunk(
+  'video/deleteVideo',
+  async (videoId, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`https://youtube-clone-api.chungmangjie200.repl.co/deleteVideo/${videoId}`);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 
 // Video slice

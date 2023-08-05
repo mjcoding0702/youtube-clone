@@ -10,11 +10,9 @@ export default function Admin() {
   const user = useSelector((state) => state.user.user)
   const allVideos = useSelector((state) => state.video.allVideos);
 
-  console.log(allVideos)
-  console.log(user)
   useEffect(() => {
       dispatch(fetchUserVideos(user.id));
-  }, [dispatch])
+  }, [dispatch, user.id, allVideos])
 
   return (
     <>
@@ -38,7 +36,7 @@ export default function Admin() {
               allVideos.map((video) => (
                 <>
                   <div className="col-sm-12 col-md-6 col-lg-4 col-xxl-3 d-flex" key={video.id}>
-                    <VideoCard imageURL={video.thumbnailurl} logoURL={video.profileurl} videoId={video.id} title={video.title} user={video.name} views={video.views} uploaded_at={video.uploaded_at} duration={video.duration}/>
+                    <VideoCard thumbnailURL={video.thumbnailurl} logoURL={video.profileurl} videoId={video.id} title={video.title} description={video.description} user={video.name} views={video.views} uploaded_at={video.uploaded_at} duration={video.duration}/>
                   </div>
                 </>
               ))

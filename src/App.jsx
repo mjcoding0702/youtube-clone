@@ -33,7 +33,7 @@ function Navbar() {
     if (!currentUser) {
       navigate('/login')
     }
-  },[currentUser])
+  },[currentUser, navigate])
 
   return (
     <>
