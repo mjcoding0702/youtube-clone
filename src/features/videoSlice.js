@@ -108,7 +108,7 @@ export const addComment = createAsyncThunk(
 );
   
 
-//Async thunk for fetching comment from a video
+//Async thunk for fetching comments from a video
 export const fetchComments = createAsyncThunk(
   'video/fetchComments',
   async(videoId, {rejectWithValue}) => {
@@ -120,6 +120,47 @@ export const fetchComments = createAsyncThunk(
     }
   }
 )
+
+// Async thunk for editing a comment
+export const editComment = createAsyncThunk(
+  'video/editComment',
+  async ({commentId, comment}, { rejectWithValue }) => {
+    console.log(commentId)
+    console.log(comment)
+    try {
+      const response = await axios.put(`https://youtube-clone-api.chungmangjie200.repl.co/editcomment/${commentId}`, {comment});
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+// Async thunk for deleting a comment
+export const deleteComment = createAsyncThunk(
+  'video/deleteComment',
+  async (commentId, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`https://youtube-clone-api.chungmangjie200.repl.co/deletecomment/${commentId}`);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+// Async thunk to increase view count when a video is visited
+export const incrementViews = createAsyncThunk('video/incrementViews', 
+  async (videoId, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`https://youtube-clone-api.chungmangjie200.repl.co/incrementviews/${videoId}`);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+});
+
+
 
 // Video slice
 export const videoSlice = createSlice({
@@ -187,6 +228,19 @@ export const videoSlice = createSlice({
           // Add any fetched comments to the array
           state.comments = action.payload;
         })
+        .addCase(editComment.fulfilled, (state, action) => {
+          state.status = 'succeeded';
+          // Update the comment in the state
+          const index = state.comments.findIndex(comment => comment.id === action.payload.id);
+          if (index !== -1) {
+            state.comments[index] = action.payload;
+          }
+        })
+        .addCase(deleteComment.fulfilled, (state, action) => {
+          state.status = 'succeeded';
+          // Remove the comment from the state
+          state.comments = state.comments.filter(comment => comment.id !== action.payload.id);
+        });
     },
   });
 

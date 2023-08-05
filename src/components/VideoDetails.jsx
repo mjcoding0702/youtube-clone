@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import VideoComments from './VideoComments';
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, fetchComments, fetchLikeType, fetchLikesDislikes, likeVideo, updateLikeStatus, updateLikesDislikes } from '../features/videoSlice';
+import { addComment, fetchComments, fetchLikeType, fetchLikesDislikes, incrementViews, likeVideo, updateLikeStatus, updateLikesDislikes } from '../features/videoSlice';
+import { Spinner } from 'react-bootstrap';
 
 export default function VideoDetails({video}) {
     const dispatch = useDispatch();
@@ -14,10 +15,9 @@ export default function VideoDetails({video}) {
     //User Data
     const user = useSelector((state) => state.user.user)
     const userProfile = user.profileurl || 'src\\assets\\profile-backup.png';  //incase if google return 403 code
-    
+
     //Comments Data
     const comments = useSelector((state) => state.video.comments)
-
 
     //Handle like
     const videoId = video.id;
@@ -63,16 +63,16 @@ export default function VideoDetails({video}) {
         if (commentText) {
             setIsCommenting(true); 
             await dispatch(addComment({ userId: user.id, videoId: video.id, comment: commentText }));
+            await dispatch(fetchComments(videoId));  //Refresh the comments
             setCommentText('');  
             setIsCommenting(false); 
-            dispatch(fetchComments(videoId));  //Refresh the comments
         }
     };
 
     //Fetch likes and dislikes for video when component mount
     useEffect(() => {
         if (videoId){
-            console.log("Ran")
+            dispatch(incrementViews(videoId));  // Add this line
             dispatch(fetchLikesDislikes(videoId));
             dispatch(fetchLikeType({videoId, userId: user.id}))
             dispatch(fetchComments(videoId));
@@ -104,19 +104,19 @@ export default function VideoDetails({video}) {
                 </div>
                 <div className="d-flex justify-content-between align-items-center flex-wrap mb-3">
                     <div className="d-flex">
-                            <img src={userProfile} width="40" alt='test' className='rounded-circle'/>
+                            <img src={video.profileurl} width="40" alt='test' className='rounded-circle'/>
                             <div className="ms-3">
-                            <p className="m-0 text-black fw-medium" style={{fontSize:'16px'}}>{user.name}</p>
-                            <p className="m-0 text-dark-emphasis" style={{fontSize:'12px'}}>470K subcribers</p>
+                            <p className="m-0 text-black fw-medium" style={{fontSize:'16px'}}>{video.name}</p>
+                            <p className="m-0 text-dark-emphasis" style={{fontSize:'12px'}}>100K subcribers</p>
                             </div>
                         <button type="button" className="btn btn-dark rounded-pill fw-medium ms-4 px-3" style={{fontSize:'14px'}}>Subscribe</button>
                     </div>
                     <div className="d-flex align-items-center">
-                        <div className="me-3">
+                        <div className="me-3" role='button'>
                             <i className={`bi ${userLikeStatus && userLikeStatus.likeType === 'like' ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'} me-2`} style={{fontSize: "20px"}} onClick={() => handleLike('like')}></i>
                             <span className="fw-medium fs-6">{likesDislikes.likes || 0}</span>
                         </div>
-                        <div className="me-3">
+                        <div className="me-3" role='button'>
                             <i className={`bi ${userLikeStatus && userLikeStatus.likeType === 'dislike' ? 'bi-hand-thumbs-down-fill' : 'bi-hand-thumbs-down'} me-2`} style={{fontSize: "20px"}} onClick={() => handleLike('dislike')}></i>
                             <span className="fw-medium fs-6">{likesDislikes.dislikes || 0}</span>
                         </div>
@@ -131,10 +131,10 @@ export default function VideoDetails({video}) {
                     </div>
                 </div>
                 <div className="bg-light rounded-3 p-2">
-                    <p className="fw-medium m-0" style={{fontSize: '16px'}}>{video.views} views • {formattedDate}</p>
+                    <p className="fw-medium m-0" style={{fontSize: '16px'}}>{video.views || 0} views • {formattedDate}</p>
                     <p style={{fontSize: '14px'}}>{video.description}</p>
                 </div>
-                <p style={{fontSize: '18px'}}>15 Comments</p>
+                <p style={{fontSize: '18px'}}>{comments.length} Comments</p>
                 <div className="d-flex align-items-center mb-4">
                     <img src={userProfile} width="40" alt='test' className='rounded-circle' />
                     <form onSubmit={handleCommentSubmit} className="d-flex" style={{width: '90%'}}>
@@ -154,9 +154,12 @@ export default function VideoDetails({video}) {
                         </button>
                     </form>
                 </div>
-                {comments && (
+                {(!comments || comments.length === 0) && (
+                    <Spinner variant='primary'></Spinner>
+                )}
+                {comments && user && (
                     comments.map((comment) => (
-                        <VideoComments key={comment.id} comment={comment.comment} userId={comment.user_id} />
+                        <VideoComments key={comment.id} commentContent={comment.comment} commentId={comment.id} userDisplayName={comment.name} userProfileURL={comment.profileurl} isUser={user.id === comment.user_id}/>
                     ))
                 )}
             </div>
