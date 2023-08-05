@@ -25,7 +25,7 @@ export default function AuthPage() {
         <div className="d-flex justify-content-center align-items-center" style={{height: '100vh'}}>
             <div className="row w-75 d-flex align-items-center justify-content-between">
                 <div className="col-5">
-                    <img src='https://firebasestorage.googleapis.com/v0/b/clone-4b31b.appspot.com/o/login_youtube.png?alt=media&token=ddb5893c-c234-44f2-ae16-85a13c39d4d8' alt="gg" className="img-fluid" style={{maxHeight: '600px'}}/>
+                    <img src='https://firebasestorage.googleapis.com/v0/b/clone-4b31b.appspot.com/o/login_youtube.png?alt=media&token=ddb5893c-c234-44f2-ae16-85a13c39d4d8' alt="YouTube Logo" className="img-fluid" style={{maxHeight: '600px'}}/>
                 </div>
                 <div className="col-6">
                     <i className="bi bi-youtube" style={{fontSize: 50, color: "red"}}></i>
