@@ -2,12 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
-import { useDispatch } from 'react-redux';
 
 // Async thunk for uploading video
 export const uploadVideo = createAsyncThunk(
   'video/uploadVideo',
-  async ({title, description, videoFile, thumbnailFile, userId}, { rejectWithValue }) => {
+  async ({title, description, duration, videoFile, thumbnailFile, userId}, { rejectWithValue }) => {
 
     try {
       let videoURL = "";
@@ -26,7 +25,7 @@ export const uploadVideo = createAsyncThunk(
       }
 
       const response = await axios.post('https://youtube-clone-api.chungmangjie200.repl.co/createvideo', {
-        title, description, videoURL, thumbnailURL, userId
+        title, description, duration, videoURL, thumbnailURL, userId
       });
 
       return response.data;  // The newly created video
@@ -36,7 +35,7 @@ export const uploadVideo = createAsyncThunk(
   }
 );
 
-//Async thunk for fetching all videos from database
+//Async thunk for fetching one video by Id
 export const fetchVideoById = createAsyncThunk(
     'video/fetchVideoById',
     async (videoId, {rejectWithValue}) => {
@@ -55,10 +54,9 @@ export const likeVideo = createAsyncThunk(
     'video/likeVideo',
     async ({videoId, userId, likeType}, { rejectWithValue }) => {
       try {
-        const response = await axios.post('https://youtube-clone-api.chungmangjie200.repl.co/likevideo', {
+        await axios.post('https://youtube-clone-api.chungmangjie200.repl.co/likevideo', {
           videoId, userId, likeType
         });
-        console.log(likeType)
 
         return { likeType };  // The like/dislike status
       } catch (error) {
@@ -150,7 +148,8 @@ export const deleteComment = createAsyncThunk(
 );
 
 // Async thunk to increase view count when a video is visited
-export const incrementViews = createAsyncThunk('video/incrementViews', 
+export const incrementViews = createAsyncThunk(
+  'video/incrementViews', 
   async (videoId, { rejectWithValue }) => {
     try {
       const response = await axios.put(`https://youtube-clone-api.chungmangjie200.repl.co/incrementviews/${videoId}`);
@@ -160,6 +159,33 @@ export const incrementViews = createAsyncThunk('video/incrementViews',
     }
 });
 
+//Async thunk to fetch all videos from database
+export const fetchAllVideos = createAsyncThunk(
+  'video/fetchAllVideos',
+  async (_, {rejectWithValue}) => {
+    try {
+      console.log("ran")
+      const response = await axios.get(`https://youtube-clone-api.chungmangjie200.repl.co/fetchallvideos`)
+      return response.data
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+//Async thunk to fetch videos of a specific user
+export const fetchUserVideos = createAsyncThunk(
+  'video/fetchUserVideos',
+  async (userId, {rejectWithValue}) => {
+    try {
+      console.log("ran")
+      const response = await axios.get(`https://youtube-clone-api.chungmangjie200.repl.co/fetchuservideos/${userId}`)
+      return response.data
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+)
 
 
 // Video slice
@@ -167,6 +193,7 @@ export const videoSlice = createSlice({
     name: 'video',
     initialState: {
       video: [],
+      allVideos: [],
       status: 'idle',
       error: null,
       userLikeStatus: null,
@@ -240,7 +267,14 @@ export const videoSlice = createSlice({
           state.status = 'succeeded';
           // Remove the comment from the state
           state.comments = state.comments.filter(comment => comment.id !== action.payload.id);
-        });
+        })
+        .addCase(fetchAllVideos.fulfilled, (state,action) => {
+          state.allVideos = action.payload;
+        })
+        .addCase(fetchUserVideos.fulfilled, (state,action) => {
+          state.allVideos = action.payload;
+        })
+
     },
   });
 

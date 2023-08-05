@@ -18,6 +18,7 @@ export default function VideoDetails({video}) {
 
     //Comments Data
     const comments = useSelector((state) => state.video.comments)
+    const [commentsFetched, setCommentsFetched] = useState(false);
 
     //Handle like
     const videoId = video.id;
@@ -76,6 +77,7 @@ export default function VideoDetails({video}) {
             dispatch(fetchLikesDislikes(videoId));
             dispatch(fetchLikeType({videoId, userId: user.id}))
             dispatch(fetchComments(videoId));
+            setCommentsFetched(true);
         }
     },[videoId])
 
@@ -100,7 +102,7 @@ export default function VideoDetails({video}) {
                     </div>
                 )}
                 <div className="video-title">
-                    <p className="fw-bold fs-5 text-black">{video.title}</p>
+                    <p className="fw-semibold fs-4 text-black mt-2">{video.title}</p>
                 </div>
                 <div className="d-flex justify-content-between align-items-center flex-wrap mb-3">
                     <div className="d-flex">
@@ -154,7 +156,7 @@ export default function VideoDetails({video}) {
                         </button>
                     </form>
                 </div>
-                {(!comments || comments.length === 0) && (
+                {!commentsFetched && (
                     <Spinner variant='primary'></Spinner>
                 )}
                 {comments && user && (

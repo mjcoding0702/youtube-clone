@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Link, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './pages/Home'
 import VideoPage from './pages/VideoPage'
 import AuthPage from './pages/AuthPage'
@@ -12,15 +12,13 @@ import { persistor, store } from './store'
 import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import VideoForm from './pages/VideoForm'
+import Admin from './pages/Admin'
 
 function Navbar() {
   const {currentUser} = useContext(AuthContext);
   const navigate = useNavigate();
   
   const user = useSelector((state) => state.user.user);
-
-  useEffect(() => {
-  }, [user]);
 
   //Handle user logout
   const handleLogout = () => {
@@ -80,8 +78,8 @@ function Navbar() {
                   <Dropdown.Toggle as="a" className="nav-link px-2 pointer-cursor" style={{color: 'black', cursor: 'pointer'}}>
                       <img src={user.profileurl || "src/assets/profile-backup.png"} width={35} className='rounded-circle' alt='profilePicture' />
                   </Dropdown.Toggle>
-
                   <Dropdown.Menu>
+                      <Dropdown.Item><Link to='/admin' className='text-decoration-none text-black'>Your Videos</Link></Dropdown.Item>
                       <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   </Dropdown.Menu>
               </Dropdown>
@@ -108,6 +106,7 @@ function App() {
                 <Route path='/home' element={<Home/>} />
                 <Route path='/video/:videoId' element={<VideoPage/>} />
                 <Route path='/videoform' element={<VideoForm/>} />
+                <Route path='/admin' element={<Admin/>} />
               </Route>
               <Route path='/login' element={<AuthPage/>} />
             </Routes>

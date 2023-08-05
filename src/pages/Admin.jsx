@@ -1,21 +1,20 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import SideMenu from '../components/SideMenu'
-import TagChip from '../components/TagChip'
-import VideoCard from '../components/VideoCard'
+import { fetchAllVideos, fetchUserVideos } from '../features/videoSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllVideos } from '../features/videoSlice';
 import { Spinner } from 'react-bootstrap';
+import VideoCard from '../components/VideoCard';
 
-export default function Home() {
+export default function Admin() {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-      dispatch(fetchAllVideos());
-  }, [dispatch])
-
+  const user = useSelector((state) => state.user.user)
   const allVideos = useSelector((state) => state.video.allVideos);
 
   console.log(allVideos)
+  console.log(user)
+  useEffect(() => {
+      dispatch(fetchUserVideos(user.id));
+  }, [dispatch])
 
   return (
     <>
@@ -31,26 +30,6 @@ export default function Home() {
       <SideMenu></SideMenu>
 
       <div className='my-2 px-4 ms-sm-250' style={{ height: '100%'}}>
-          <div className='chip-container d-flex flex-nowrap overflow-hidden mb-4'>
-              <TagChip isActive={true} text='All'></TagChip>
-              <TagChip text='Music'></TagChip>
-              <TagChip text='Podcasts'></TagChip>
-              <TagChip text='Finance'></TagChip>
-              <TagChip text='Computer Science'></TagChip>
-              <TagChip text='JavaScript'></TagChip>
-              <TagChip text='Python'></TagChip>
-              <TagChip text='Machine Learning'></TagChip>
-              <TagChip text='Data Science'></TagChip>
-              <TagChip text='C++'></TagChip>
-              <TagChip text='Manga'></TagChip>
-              <TagChip text='Live'></TagChip>
-              <TagChip text='Lessons'></TagChip>
-              <TagChip text='Firebase'></TagChip>
-              <TagChip text='Motivation'></TagChip>
-              <TagChip text='Watched'></TagChip>
-              <TagChip text='React Routers'></TagChip>
-          </div>
-
           <div className='row d-flex flex-wrap'>
             {(!allVideos || allVideos.length === 0) && (
               <Spinner variant='primary'></Spinner>
@@ -69,4 +48,3 @@ export default function Home() {
     </>
   )
 }
-
