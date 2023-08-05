@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
 
-export default function VideoCardSmall({imageURL, title, user, views, uploaded_at, duration}){
+export default function VideoCardSmall({videoId, imageURL, title, user, views, uploaded_at, duration}){
     const uploadedDate = new Date(uploaded_at);
     const timeAgo = formatDistanceToNow(uploadedDate, { addSuffix: true });
 
@@ -30,7 +30,7 @@ export default function VideoCardSmall({imageURL, title, user, views, uploaded_a
     
     return (
       <>
-        <a href="/video/1234" className="card mb-3 w-100 text-decoration-none" style={{height: '98px'}}>
+        <a href={`/video/${videoId}`} className="card mb-3 w-100 text-decoration-none" style={{height: '98px'}}>
             <div className="row g-0">
                 <div className="col-4 col-md-3 col-lg-3 col-xl-4 position-relative" style={{height: '94px'}}>
                     <div style={{position: 'relative', width: '100%', height: '100%'}}>

@@ -18,6 +18,9 @@ function Navbar() {
   const {currentUser} = useContext(AuthContext);
   const navigate = useNavigate();
   
+  //Backup profile URL
+  const backupProfileURL = 'https://firebasestorage.googleapis.com/v0/b/clone-4b31b.appspot.com/o/profile-backup.png?alt=media&token=8a063fcb-f324-48c2-b66a-91f80f914a5a'
+  
   const user = useSelector((state) => state.user.user);
 
   //Handle user logout
@@ -62,8 +65,9 @@ function Navbar() {
           {/* Third column */}
           <ul className="nav col-md-auto">
             <li>
-              <a href="#" className="nav-link px-2">
+              <a href="/videoform" className="nav-link px-2">
                 <i className="bi bi-camera-reels text-black" style={{fontSize: "20px"}}></i>
+                <span className='text-black ms-2'>New Video</span>
               </a>
             </li>
 
@@ -76,9 +80,10 @@ function Navbar() {
             <li>
               <Dropdown>
                   <Dropdown.Toggle as="a" className="nav-link px-2 pointer-cursor" style={{color: 'black', cursor: 'pointer'}}>
-                      <img src={user.profileurl || "src/assets/profile-backup.png"} width={35} className='rounded-circle' alt='profilePicture' />
+                      <img src={user.profileurl || backupProfileURL} width={35} className='rounded-circle' alt='profilePicture' />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
+                      <Dropdown.Item><Link to='/videoform' className='text-decoration-none text-black'>Upload Video</Link></Dropdown.Item>
                       <Dropdown.Item><Link to='/admin' className='text-decoration-none text-black'>Your Videos</Link></Dropdown.Item>
                       <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   </Dropdown.Menu>

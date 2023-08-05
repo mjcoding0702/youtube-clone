@@ -18,6 +18,7 @@ export default function VideoPage() {
         dispatch(fetchAllVideos());
     }, [dispatch, videoId])
 
+
     return (
     <>
         {/* Custom CSS Class */}
@@ -42,26 +43,9 @@ export default function VideoPage() {
                 <div className="col-lg-4 col-xxl-3 px-0 px-lg-3">
                     {allVideos && (
                         allVideos.map((video) => (
-                            <VideoCardSmall key={video.id} imageURL={video.thumbnailurl} title={video.title} user={video.name} views={video.views} uploaded_at={video.uploaded_at} duration={video.duration}/>
+                            <VideoCardSmall key={video.id} videoId={video.id} imageURL={video.thumbnailurl} title={video.title} user={video.name} views={video.views} uploaded_at={video.uploaded_at} duration={video.duration}/>
                         ))
                     )}
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = '9d8f7g6h5j4k3l2m1n0o9p8q7r6s5t4u3v2w1x0y9z8a7b6c5d4e3f2g1h0i9j8k7l6m5n4o3p2q1r0s9t8u7v6w5x4y3z2a1b0c' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = '12345678911234567891123456789112345' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                    <VideoCardSmall imageURL='src\assets\thumbnail.png' logoURL = 'src\assets\logo.png' title = 'Build 15 JavaScript Projects - Vanilla JavaScript Course' user = 'freeCodeCamp.org' views={100} uploaded_at={3}/>
-                
                 </div>
             </div>
         </div>
