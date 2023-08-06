@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import VideoCardSmall from "../components/VideoCardSmall";
 import VideoDetails from "../components/VideoDetails";
 import { useParams } from "react-router-dom";

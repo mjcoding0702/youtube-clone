@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { deleteVideo, editVideo, fetchUserVideos } from '../features/videoSlice';
+import { deleteVideo, editVideo } from '../features/videoSlice';
 
 export default function VideoCard({thumbnailURL,logoURL,videoId, title,description, user,views,uploaded_at,duration}){
     //Format the time passed after uploaded

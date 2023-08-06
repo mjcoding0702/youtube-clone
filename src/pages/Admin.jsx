@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import SideMenu from '../components/SideMenu'
-import { fetchAllVideos, fetchUserVideos } from '../features/videoSlice';
+import { fetchUserVideos } from '../features/videoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
 import VideoCard from '../components/VideoCard';
