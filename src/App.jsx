@@ -13,6 +13,7 @@ import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import VideoForm from './pages/VideoForm'
 import Admin from './pages/Admin'
+import RealYtPage from './pages/RealYtPage'
 
 function Navbar() {
   const {currentUser} = useContext(AuthContext);
@@ -85,6 +86,7 @@ function Navbar() {
                   <Dropdown.Menu>
                       <Dropdown.Item><Link to='/videoform' className='text-decoration-none text-black'>Upload Video</Link></Dropdown.Item>
                       <Dropdown.Item><Link to='/admin' className='text-decoration-none text-black'>Your Videos</Link></Dropdown.Item>
+                      <Dropdown.Item><Link to='/realyt' className='text-decoration-none text-black'>Real YouTube</Link></Dropdown.Item>
                       <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                   </Dropdown.Menu>
               </Dropdown>
@@ -112,6 +114,7 @@ function App() {
                 <Route path='/video/:videoId' element={<VideoPage/>} />
                 <Route path='/videoform' element={<VideoForm/>} />
                 <Route path='/admin' element={<Admin/>} />
+                <Route path='/realyt' element={<RealYtPage/>} />
               </Route>
               <Route path='/login' element={<AuthPage/>} />
             </Routes>
