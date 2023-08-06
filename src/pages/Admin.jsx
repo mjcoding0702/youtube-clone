@@ -4,15 +4,21 @@ import { fetchUserVideos } from '../features/videoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from 'react-bootstrap';
 import VideoCard from '../components/VideoCard';
+import { useNavigate } from 'react-router-dom';
 
 export default function Admin() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user)
   const allVideos = useSelector((state) => state.video.allVideos);
+  const navigate = useNavigate();
 
   useEffect(() => {
+      if (!user.id){
+        alert("Log out and sign in again to view")
+        navigate('/home')
+      }
       dispatch(fetchUserVideos(user.id));
-  }, [dispatch, user.id, allVideos])
+  }, [dispatch, user.id, allVideos, navigate])
 
   return (
     <>
