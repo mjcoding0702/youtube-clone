@@ -71,7 +71,7 @@ function Navbar() {
               </a>
             </li>
 
-            <li>
+            <li className='d-none d-sm-flex'>
               <a href="#" className="nav-link px-2">
                 <i className="bi bi-bell text-black" style={{fontSize: "20px"}}></i>
               </a>

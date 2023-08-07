@@ -26,19 +26,19 @@ export default function AuthPage() {
         <>
             <div className="container d-flex justify-content-center align-items-center min-vh-100">
                 <div className="row border p-3 bg-white shadow rounded-5 box-area">
-                    <div className="col-md-6 d-flex justify-content-center border rounded-4 align-items-center flex-column left-box">
-                        <div className="featured-image mb-3">
+                    <div className="col-md-6  d-flex justify-content-center border rounded-4 align-items-center flex-column left-box">
+                        <div className="featured-image mb-3 mt-2">
                             <img src="https://firebasestorage.googleapis.com/v0/b/clone-4b31b.appspot.com/o/login_youtube.png?alt=media&token=ddb5893c-c234-44f2-ae16-85a13c39d4d8" className="img-fluid" alt="Youtube logo" style={{width:'250px'}} />
                             <p className="text-black fs-2 my-2 fw-medium">Broadcast Yourself</p>
                             <small className="text-black text-wrap text-center" style={{width: '17rem'}}>Inspire others with your story</small>
                         </div>
                     </div>
 
-                    <div className="col-md-6 p-3 p-md-5">
+                    <div className="col-md-6 pb-0 pb-md-3 p-3 p-md-5">
                         <div className="row align-items-center">
                             <div className="header-text mb-4 d-flex flex-column align-items-center">
                                 <i className="bi bi-youtube " style={{fontSize: 50, color: "red"}}></i>
-                                <p className="fw-medium fs-3">Ready to Shine?</p>
+                                <p className="fw-medium fs-3 mb-2">Ready to Shine?</p>
                                 <p>Login to YouTube Clone</p>
                                 <Button className="rounded-pill w-100" variant="outline-dark" onClick={handleSignIn}>
                                     <i className="bi bi-google"></i> Sign in with Google
