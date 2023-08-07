@@ -45,12 +45,11 @@ function Navbar() {
         <div className="d-flex flex-wrap align-item-center justify-content-between p-2 px-4">
           {/* First column */}
           <div className="col-md-auto d-flex align-items-center">
-            <i className="bi bi-list" style={{fontSize: "24px"}}></i>
-            <a href="/home"><img src="https://firebasestorage.googleapis.com/v0/b/clone-4b31b.appspot.com/o/yt-logo.png?alt=media&token=73306d8f-127f-46b2-bca0-f234f2049ea0" width="120" alt="YouTube logo" className="ms-2"></img></a>
+            <a href="/home"><img src="https://firebasestorage.googleapis.com/v0/b/clone-4b31b.appspot.com/o/yt-logo.png?alt=media&token=73306d8f-127f-46b2-bca0-f234f2049ea0" width="120" alt="YouTube logo"></img></a>
           </div>
 
           {/* Second column */}
-          <div className="col col-sm-4 col-md-6 col-lg-5 d-none d-sm-flex align-items-center justify-content-center">
+          <div className="col col-sm-3 col-md-4 col-lg-5 d-none d-sm-flex align-items-center justify-content-center">
             <div className="input-group flex-nowrap col-10 disabled" style={{width: "90%"}}>
               <input type="text" className="form-control rounded-start-pill" placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2"></input>
               <button className="input-group-text rounded-end-circle" id="basic-addon2">
@@ -68,7 +67,7 @@ function Navbar() {
             <li>
               <a href="/videoform" className="nav-link px-2">
                 <i className="bi bi-camera-reels text-black" style={{fontSize: "20px"}}></i>
-                <span className='text-black ms-2'>New Video</span>
+                <span className='text-black ms-2 d-none d-md-inline-block'>New Video</span>
               </a>
             </li>
 

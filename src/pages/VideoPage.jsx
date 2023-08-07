@@ -37,7 +37,7 @@ export default function VideoPage() {
             }
         </style>
 
-        <div className="container-fluid mt-3 px-5 px-custom">
+        <div className="container-fluid mt-3 px-4 px-md-5 px-custom">
             <div className='row'>
                 <VideoDetails video={video}></VideoDetails>
                 <div className="col-lg-4 col-xxl-3 px-0 px-lg-3">

@@ -98,8 +98,8 @@ export default function VideoForm() {
 
     return (
     <>
-        <div className="d-flex justify-content-center align-items-center my-5">
-            <div className="col-6 col-xl-5">
+        <div className="d-flex justify-content-center align-items-center my-3 my-md-5">
+            <div className="col-11 col-md-9 col-lg-7 col-xl-6 col-xxl-5">
                 <div className="d-flex flex-column align-items-center">
                     <h2 className="text-center">Have a YouTuber Dream? <i className="bi bi-youtube" style={{fontSize:'30px', color: 'red'}}></i></h2>
                     <p className="mb-4 text-center">Upload your first video today!</p>

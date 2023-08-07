@@ -123,11 +123,11 @@ export default function VideoDetails({video}) {
                             <span className="fw-medium fs-6">{likesDislikes.dislikes || 0}</span>
                         </div>
                         
-                        <div className="me-3 d-flex align-items-center">
+                        <div className="me-3 d-none d-md-flex align-items-center">
                             <i className='bi bi-share me-2' style={{fontSize: "20px"}}></i>
                             <span className="fw-medium" style={{fontSize:'14px'}}>Share</span>
                         </div>
-                        <div className="me-3">
+                        <div className="me-3 d-none d-md-flex">
                             <i className="bi bi-three-dots"></i>
                         </div>
                     </div>

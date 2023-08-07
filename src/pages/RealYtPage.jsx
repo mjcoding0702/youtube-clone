@@ -27,17 +27,25 @@ export default function RealYtPage() {
         <>
             {/* Custom CSS Class */}
             <style>
-                {`@media (min-width: 576px) {
+            {`
+                .chip-container {
+                overflow-x: auto;
+                }
+                .chip-container::-webkit-scrollbar {
+                display: none;
+                }
+                @media (min-width: 576px) {
                 .ms-sm-250 {
                     margin-left: 250px !important;
-                }}`
                 }
+                }
+            `}
             </style>
 
             <SideMenu></SideMenu>
 
             <div className='my-2 px-4 ms-sm-250' style={{ height: '100%'}}>
-                <div className='chip-container d-flex flex-nowrap overflow-hidden mb-4'>
+                <div className='chip-container d-flex flex-nowrap overflow-scroll mb-4'>
                     <TagChip isActive={activeChip === 'Andrew Tate'} text='Andrew Tate' onClick={() => handleTagClick('Andrew Tate')}></TagChip>
                     <TagChip isActive={activeChip === 'Sigma School'} text='Sigma School' onClick={() => handleTagClick('Sigma School')}></TagChip>
                     <TagChip isActive={activeChip === 'Learn App Code'} text='Learn App Code' onClick={() => handleTagClick('Learn App Code')}></TagChip>
